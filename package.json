@@ -10,7 +10,9 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.17.1",
+    "events": "^1.1.1",
     "express": "^4.15.2",
-    "firebase": "^3.7.4"
+    "firebase": "^3.7.4",
+    "util": "^0.10.3"
   }
 }
