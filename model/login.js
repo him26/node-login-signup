@@ -12,45 +12,36 @@
 
 login.prototype.isValidate = function (loginEmailValidateData) {
         console.log("I am in isValidate Method");
-        // var loginValidateFlag ;
         var email = loginEmailValidateData.email;
         var password = loginEmailValidateData.password;
         if (email == "" || password == "") {
             console.log("1 if");
             if (email == "" && password == "") {
-                  //  loginEvent.emit("valdationfail",null,"validation fail");
                 return false ;
             }
             if (email == "") {
                 console.log("3 if");
                 return false ;
-                // loginEvent.emit("valdationfail",null,"validation fail");
             } else {
                 console.log("4 if");
                 return false ;
-                // loginEvent.emit("valdationfail",null,"validation fail");
             }
         } else if (email == undefined || password == undefined) {
             console.log("else if");
             if (email == undefined && password == undefined) {
               console.log("1 if");
                   return false;
-                  // loginEvent.emit("valdationfail","validation fail",false);
               }
             if (email == undefined) {
               console.log("2 if");
               return false ;
-              // loginEvent.emit("valdationfail","validation fail",false);
             } else {
               console.log("3 if");
             return false
-            // loginEvent.emit("valdationfail","validation fail",false);
             }
             return false;
-            // loginEvent.emit("valdationfail","validation fail",false);
       }
       return true;
-        // loginEvent.emit("valdationfail",true,"validation success");
 }
 login.prototype.checklogin = function(bodydata) {
      var email = bodydata.email;
@@ -62,12 +53,10 @@ login.prototype.checklogin = function(bodydata) {
                 if (temp.password === password) {
                     loginEvent.emit("loginsuccess",null,"you are online");
                 } else {
-                    // console.log("Invalid password");
                     loginEvent.emit("loginsuccess","Invalid password",null);
                 }
             });
         } else {
-          // console.log("Invalid emailName");
           loginEvent.emit("loginsuccess","Invalid emailName",null);
         }
   });

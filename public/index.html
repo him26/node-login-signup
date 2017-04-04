@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JQuerySpaApp</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.6/handlebars.min.js"></script>
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<!--Document body  -->
+<body id="body">
+  <!--Document Header  -->
+    <header>
+      <!--navigation bar for header  -->
+        <nav class="navbar navbar-inverse" style="background-color: rgba(110, 53, 128, 0.68);">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+                </div>
+                <div class="collapse navbar-collapse" id="myNavbar">
+                  <!--Login and Signup links  -->
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="#login">Login</a></li>
+                        <li><a href="#signup">signup</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <!--div containe to hold the page which is called  -->
+    <div id="page-container">
+    </div>
+    <!--login page template  -->
+    <script id="login-page-template" type="text/x-handlebars-template">
+        <div id="login-page" class="page">
+          <!--login form  -->
+            <form id="login">
+              <!--this div is for form header  -->
+                <div class="login-header">
+                    <h3>Login Form</h3>
+                </div>
+                <hr>
+                <!--this div is for form body  -->
+                <div class="form-group">
+                    <input type="email" class="form-control-form " id="exampleInputEmaillog" placeholder="Email" required="">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control-form " id="exampleInputPasswordpas" placeholder="Password" required="">
+                </div>
+                    <input type="submit" id="loginsubmit" class="btn-lgin" value="Login">
+                <hr>
+                <!--div for footer  -->
+                <div class="login-footer">
+                </div>
+            </form>
+        </div>
+    </script>
+    <!--signup page template  -->
+    <script id="signup-page-template" type="text/x-handlebars-template">
+        <div id="signup-page" class="page">
+          <!--signup form  -->
+            <form id="signup-form" action="#signupsuccess" method="GET">
+              <!--signup header  -->
+                <div class="signup-header">
+                    <h3>Sign Up Form</h3>
+                </div>
+                <hr>
+                <!--signup body  -->
+                <div class="form-group">
+                    <input type="Text" class="form-control-form " id="exampleInputFirstNamelog" placeholder="FirstName" required="">
+                </div>
+                <div class="form-group">
+                    <input type="Text" class="form-control-form " id="exampleInputLastName" placeholder="LastName" required="">
+                </div>
+                <div class="form-group">
+                    <input type="email" class="form-control-form " id="exampleInputEnterEmail" placeholder="Email" required="">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control-form " id="exampleInputCreatePassword" placeholder="Create Your Password" required="">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control-form " id="exampleInputConfirmPassword" placeholder="Confirm Your Password" required="">
+                </div>
+                <div class="form-group">
+                    <input type="Text" class="form-control-form " id="exampleInputMobileNo" placeholder="Mobile Number" required="">
+                </div>
+                <div class="form-group">
+                    <input type="submit" class="btn-signup" id="signupsubmit" value="Submit">
+                </div>
+                <hr>
+                <!--signup footer  -->
+                <div class="signup-footer">
+                    <p id="result"></p>
+                </div>
+            </form>
+    </script>
+    <script src="javascript/app.js"></script>
+</body>
+</html>
