@@ -1,28 +1,12 @@
 var express = require('express'),
 router = express.Router();
-router.get('/',function(req,res){
-   res.send('main controller');
-});
-router.use('/api',require('./signup'));
-router.use('/api',require('./login'));
+
+router.use(require('./session'));
+router.use(require('./login'));
+router.use(require('./signup'));
+router.use(require('./logout'));
 
 module.exports = router;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // router.use(function (req, res, next) {
 //     var send = res.send;
 //     res.send = function () {

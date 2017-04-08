@@ -1,55 +1,18 @@
 $(document).ready(function() {
-    // if (sessionStorage.getItem("email") !== null) {
-    //     console.log(sessionStorage.getItem('email'));
-    //     loginSuccessPage();
-    // }
-        /*
-        constructor for create signup object
-        */
-    var User = function(fname, lname, email, createPass, confirmPass, mob) {
-            this.fname = fname;
-            this.lname = lname;
-            this.email = email;
-            this.createPass = createPass;
-            this.confirmPass = confirmPass;
-            this.mob = mob;
-        };
-        /*
-        function for set singnup data into cookies
-        */
-    function setCookie(cname, cvalue, exdays) {
-        var cookiesflag = false;
-        var d = new Date();
-        d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-        var expires = "expires=" + d.toUTCString();
-        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-        if (document.cookie) {
-            cookiesflag = true;
-            console.log("hi.........");
-        }
-        return cookiesflag;
-    }
-      /*
-      function for get signup data from cookies
-      */
-    function getCookie(cname) {
-        var name = cname + "=";
-        var ca = document.cookie.split(';');
-        console.log("cookies is ", ca);
-        for (var i = 0; i < ca.length; i++) {
-            var c = ca[i];
-            while (c.charAt(0) == ' ') {
-                c = c.substring(1);
-            }
-            if (c.indexOf(name) === 0) {
-                return c.substring(name.length, c.length);
+    $.ajax({
+        url: "http://localhost:8081/session",
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+            //  console.log(request.getAllResponseHeaders());
+            console.log("jgh", data.session);
+            console.log(data);
+            if (data.session == true) {
+                loginSuccessPage();
             }
         }
-        return "";
-    }
-      /*
-      function for validate form value
-      */
+    });
+    /**/
     // function validateForm() {
     //     var firstName = $('#exampleInputFirstNamelog').val();
     //     var lastName = $('#exampleInputLastName').val();
@@ -58,7 +21,6 @@ $(document).ready(function() {
     //     var confromPassword = $('#exampleInputConfirmPassword').val();
     //     var mobileNumber = $('#exampleInputMobileNo').val();
     //     var newmobileno = parseInt(mobileNumber);
-    //     // console.log(typeof("hiiiiiiiiiiiiiii", mobileNumber));
     //     var nameval = /^[A-Za-z]+$/;
     //     var passval = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,10}/;
     //     var emailval = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
@@ -104,7 +66,21 @@ $(document).ready(function() {
     //     }
     //     return flag;
     // }
-    //   /*function for calling login success page by ajax*/
+    /*
+    constructor for create signup object
+    */
+    var User = function(fname, lname, email, createPass, confirmPass, mob) {
+        this.fname = fname;
+        this.lname = lname;
+        this.email = email;
+        this.createPass = createPass;
+        this.confirmPass = confirmPass;
+        this.mob = mob;
+    };
+    var Userlogin = function(email, password) {
+        this.email = email;
+        this.password = password;
+    };
     function loginSuccessPage() {
         $.ajax({
             url: "loginValid.html",
@@ -115,71 +91,98 @@ $(document).ready(function() {
             }
         });
     }
-      /*it is calling by login form submit button*/
+    function indexPage() {
+        $.ajax({
+            url: "index.html",
+            type: "GET",
+            dataType: "text",
+            success: function(response) {
+                $("#body").html(response);
+            }
+        });
+    }
+    /*it is calling by login form submit button*/
     $(document).on("submit", "#login", (function(event) {
         var eAddress = $('#exampleInputEmaillog').val();
         var password = $('#exampleInputPasswordpas').val();
-        var user = JSON.parse(getCookie("detail"));
         var credentialsFlag = false;
-        console.log(user);
-        for (var i = 0; i < user.length; i++) {
-            var em = user[i].email;
-            var pass = user[i].p1;
-            if (eAddress == em && password == pass) {
-                credentialsFlag = true;
+        var userloginobj = new Userlogin(eAddress, password);
+        console.log("userobj is........", userloginobj);
+        $.ajax({
+            url: "http://localhost:8081/login",
+            type: "POST",
+            dataType: "JSON",
+            data: JSON.stringify(userloginobj),
+            contentType: 'application/json',
+            success: function(data) {
+                console.log("login response is........", data);
+                for (var i = 0; i < data.length; i++) {
+                    var status1 = data[i].status;
+                    if (!data[i].session && !status1 || data[i].param == "email" || data[i].param == "createPass" || data[i].param == "confirmPass" || data[i].param == "mob") {
+                        $('span').remove();
+                        $('#loginresult').after('<span class="error" id="sp">' + data[i].msg + '</span><br>');
+                    } else {
+                        loginSuccessPage();
+                    }
+                }
             }
-        }
-        if (credentialsFlag) {
-            sessionStorage.setItem("email", eAddress);
-            loginSuccessPage();
-        } else {
-            alert("your email credentials are not valid");
-        }
+        });
         event.preventDefault();
     }));
-      /*
-      it is calling by signup-form  submit button
-      */
+    /*
+    it is calling by signup-form  submit button
+    */
     $(document).on("submit", "#signup-form", (function(event) {
-
-
-            var firstName = $('#exampleInputFirstNamelog').val();
-            var lastName = $('#exampleInputLastName').val();
-            var emailAddress = $('#exampleInputEnterEmail').val();
-            var creatPassword = $('#exampleInputCreatePassword').val();
-            var confirmPassword = $('#exampleInputConfirmPassword').val();
-            var mobileNumber = $('#exampleInputMobileNo').val();
-            var newMobNo = parseInt(mobileNumber);
-            var userobj = new User(firstName, lastName, emailAddress, creatPassword, confirmPassword, newMobNo);
-            $.ajax({
-                url: "http://127.0.0.1:8081/api/signup",
-                type: "POST",
-                dataType: "JSON",
-                data: JSON.stringify(userobj),
-                contentType: 'application/json',
-                success: function(data) {
-                 var data1 = JSON.parse(data);
-                // var status = data.status;
-                // console.log("data is ",data);
-                // console.log("status is ",status);
-                console.log('success');
-                console.log(data1);
-              }
-            });
+        var firstName = $('#exampleInputFirstNamelog').val();
+        var lastName = $('#exampleInputLastName').val();
+        var emailAddress = $('#exampleInputEnterEmail').val();
+        var creatPassword = $('#exampleInputCreatePassword').val();
+        var confirmPassword = $('#exampleInputConfirmPassword').val();
+        var mobileNumber = $('#exampleInputMobileNo').val();
+        var newMobNo = parseInt(mobileNumber);
+        var userobj = new User(firstName, lastName, emailAddress, creatPassword, confirmPassword, newMobNo);
+        $(':input', '#signup-form').not(':submit').val('');
+        $.ajax({
+            url: "http://localhost:8081/signup",
+            type: "POST",
+            dataType: "JSON",
+            data: JSON.stringify(userobj),
+            contentType: 'application/json',
+            success: function(data) {
+                console.log(data);
+                for (var i = 0; i < data.length; i++) {
+                    var status1 = data[i].status;
+                    if (status1 || data[i].param == "email" || data[i].param == "createPass" || data[i].param == "confirmPass" || data[i].param == "mob") {
+                        $('span').remove();
+                        $('#result').after('<span class="error">' + data[i].msg + '</span><br>');
+                    } else {
+                        $('span').remove();
+                        $('#result').after('<span class="error">' + data[i].msg + '</span>');
+                    }
+                }
+            }
+        });
         event.preventDefault();
     }));
-      /*
-      it is calling by logout button fromlogin success page
-      */
+    /*
+    it is calling by logout button fromlogin success page
+    */
     $(document).on("click", "#logout-button", (function() {
-        sessionStorage.removeItem("email");
-        window.location.hash = "";
-        location.reload();
-        return;
+        $.ajax({
+            url: "http://localhost:8081/logout",
+            type: "GET",
+            success: function(data) {
+                console.log("jgh", data.session);
+                if (data.session == false) {
+                    indexPage();
+                }
+            }
+
+        });
     }));
-    // if (typeof window.location.origin === "undefined") {
-    //     window.location.origin = window.location.protocol + "//" + window.location.host;
-    // }
+    if (typeof window.location.origin === "undefined") {
+        window.location.origin = window.location.protocol + "//" + window.location.host;
+    }
     var utils = {
         renderPageTemplate: function(templateId, data) {
             console.log("templateId....", templateId);
@@ -200,7 +203,6 @@ $(document).ready(function() {
     var router = {
         routes: {},
         init: function() {
-            console.log('router was created...');
             this.bindEvents();
             $(window).trigger("hashchange");
         },
@@ -209,9 +211,7 @@ $(document).ready(function() {
         },
         render: function() {
             var keyName = window.location.hash.split("/")[0];
-            // console.log("I am keyName",keyName);
             var url = window.location.hash;
-            console.log("I am url",url);
             var log = $("#page-container").find(".active").hide().removeClass("active");
             if (this.routes[keyName]) {
                 this.routes[keyName](url);
@@ -222,18 +222,14 @@ $(document).ready(function() {
     };
     var spaRoutes = {
         "#login": function(url) {
-            console.log('login was called...');
             utils.renderPageTemplate("#login-page-template");
         },
         "#signup": function(url) {
-            console.log('signup was called...');
             utils.renderPageTemplate("#signup-page-template");
         },
-        "#signupsuccess": function(url) {
-            console.log('signupsuccess was called...');
-            utils.renderPageTemplate("#signupsuccess-page-template");
-        }
     };
-    var spaRouter = $.extend({}, router, {routes: spaRoutes});
+    var spaRouter = $.extend({}, router, {
+        routes: spaRoutes
+    });
     spaRouter.init();
 });

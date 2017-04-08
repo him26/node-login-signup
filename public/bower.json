@@ -1,0 +1,22 @@
+{
+  "name": "public",
+  "homepage": "https://github.com/him26/node-login-signup",
+  "authors": [
+    "himanshu gautam <gautamhimanshu5446@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "jquery": "^3.2.1",
+    "handlebars": "^4.0.5"
+  }
+}
